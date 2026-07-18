@@ -1,0 +1,53 @@
+name: Release
+
+on:
+  push:
+    tags: [v*]
+
+jobs:
+  release:
+    name: Build and release Windows binary
+    runs-on: windows-latest
+    env:
+      GHC_VERSION: '9.10.3'
+    steps:
+      - name: Checkout code with submodule
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+      - name: Set up GHC and Cabal
+        id: setup
+        uses: haskell-actions/setup@v2.11.0
+        with:
+          ghc-version: ${{ env.GHC_VERSION }}
+          cabal-version: latest
+          cabal-update: true
+      - name: Cache Cabal store and build artifacts
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ${{ steps.setup.outputs.cabal-store }}
+            dist-newstyle
+          key: >-
+            ${{ runner.os }}-cabal-${{ env.GHC_VERSION }}-${{
+              hashFiles('jbeam-edit-lsp.cabal', 'external/jbeam-edit/jbeam-edit.cabal')
+            }}
+          restore-keys: |
+            ${{ runner.os }}-cabal-${{ env.GHC_VERSION }}-
+      - name: Build server
+        run: cabal build jbeam-edit-lsp:exe:jbeam-lsp-server
+      - name: Stage and package binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          BIN=$(find dist-newstyle -type f -name 'jbeam-lsp-server.exe' | head -n 1)
+          cp "$BIN" dist/jbeam-lsp-server.exe
+          cd dist && 7z a "jbeam-lsp-server-${GITHUB_REF_NAME}.zip" jbeam-lsp-server.exe
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v3.0.0
+        with:
+          tag_name: ${{ github.ref_name }}
+          draft: true
+          generate_release_notes: true
+          files: dist/*.zip

@@ -1,0 +1,38 @@
+name: Lint & format
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - '**.hs'
+      - '.hlint.yaml'
+      - 'fourmolu.yaml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-format:
+    if: github.event.pull_request.draft != true
+    name: Lint and format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Set up HLint
+        uses: haskell-actions/hlint-setup@v2
+        with:
+          version: latest
+      - name: Run hlint
+        run: hlint src app test
+      - name: Run fourmolu
+        uses: haskell-actions/run-fourmolu@v13
+        with:
+          pattern: |
+            src/**/*.hs
+            app/**/*.hs
+            test/**/*.hs
+          version: latest
