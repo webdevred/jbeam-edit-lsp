@@ -1,0 +1,107 @@
+cabal-version: 2.2
+
+-- This file has been generated from package.yaml by hpack version 0.38.3.
+--
+-- see: https://github.com/sol/hpack
+
+name:           jbeam-edit-lsp
+version:        0.0.1.0
+synopsis:       Language server for BeamNG JBeam files, built on jbeam-edit.
+description:    jbeam-edit-lsp is a Language Server Protocol implementation for BeamNG JBeam files. It reuses the parser and formatter from jbeam-edit to provide document formatting over LSP. See the README for usage instructions.
+category:       Command Line, Jbeam, Beamng, LSP
+homepage:       https://github.com/webdevred/jbeam-edit-lsp#readme
+bug-reports:    https://github.com/webdevred/jbeam-edit-lsp/issues
+author:         webdevred
+maintainer:     example@example.com
+copyright:      2025 webdevred
+license:        BSD-3-Clause
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/webdevred/jbeam-edit-lsp
+
+library
+  exposed-modules:
+      JbeamEdit.LSP.Handlers.Formatting
+      JbeamEdit.LSP.Server
+      JbeamEdit.LSP.Services.DocumentStore
+  other-modules:
+      Paths_jbeam_edit_lsp
+  autogen-modules:
+      Paths_jbeam_edit_lsp
+  hs-source-dirs:
+      src
+  default-extensions:
+      OverloadedStrings
+      ImportQualifiedPost
+      DerivingStrategies
+      TupleSections
+      DataKinds
+      PolyKinds
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      aeson
+    , base >=4.20
+    , bytestring
+    , co-log-core
+    , containers
+    , jbeam-edit
+    , lsp >=2.7
+    , text
+  default-language: GHC2021
+
+executable jbeam-lsp-server
+  main-is: Main.hs
+  other-modules:
+      CommandLineOptions
+      Paths_jbeam_edit_lsp
+  autogen-modules:
+      Paths_jbeam_edit_lsp
+  hs-source-dirs:
+      app
+  default-extensions:
+      OverloadedStrings
+      ImportQualifiedPost
+      DerivingStrategies
+      TupleSections
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.20
+    , filepath >=1.5.1.0
+    , jbeam-edit
+    , jbeam-edit-lsp
+  default-language: GHC2021
+
+test-suite jbeam-edit-lsp-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      DocumentStoreSpec
+      WorkspaceLspSpec
+      Paths_jbeam_edit_lsp
+  autogen-modules:
+      Paths_jbeam_edit_lsp
+  hs-source-dirs:
+      test
+  default-extensions:
+      OverloadedStrings
+      ImportQualifiedPost
+      DerivingStrategies
+      TupleSections
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-tool-depends:
+      hspec-discover:hspec-discover
+    , jbeam-edit-lsp:jbeam-lsp-server
+  build-depends:
+      base >=4.20
+    , filepath >=1.5.1.0
+    , hspec
+    , jbeam-edit-lsp
+    , lsp >=2.7
+    , lsp-test
+    , text
+  default-language: GHC2021

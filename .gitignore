@@ -1,0 +1,13 @@
+dist-newstyle/
+dist/
+cabal.project.local
+cabal.project.local~
+cabal.project.*.local
+cabal.project.*.freeze
+.ghc.environment.*
+.hpc/
+.stack-work/
+TAGS
+**/*~
+**/#*#
+**/.#*

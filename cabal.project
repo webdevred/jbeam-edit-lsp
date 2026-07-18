@@ -1,0 +1,18 @@
+-- Core (jbeam-edit) is consumed from the git submodule at external/jbeam-edit.
+-- The submodule commit is the pinned core version; bump it with:
+--   git -C external/jbeam-edit checkout <ref> && git add external/jbeam-edit
+-- Pinned core commit: 4be81abc76b2b60b0e2a8c488933f91c443d1be3
+--
+-- TODO: once a jbeam-edit release includes the current core API (post v0.0.5),
+-- repin this submodule to that release tag and add a CI check validating that
+-- the submodule commit matches the latest jbeam-edit release.
+packages:
+  .
+  external/jbeam-edit
+
+optimization: False
+
+package jbeam-edit
+  tests: False
+  benchmarks: False
+  flags: -dump-ast -transformation -lsp-server -windows-example-paths
