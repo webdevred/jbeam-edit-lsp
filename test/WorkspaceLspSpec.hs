@@ -40,8 +40,8 @@ jbflTests =
     )
   ,
     ( "jbeam" </> "fender.jbeam"
-    , "test" </> "data" </> "fender-custom-minimal-jbfl.jbeam"
-    , "test" </> "data" </> "custom-minimal.jbfl"
+    , exampleRoot </> "formatted_jbeam" </> "fender-complex-jbfl.jbeam"
+    , exampleRoot </> "jbfl" </> "complex.jbfl"
     )
   ]
 
